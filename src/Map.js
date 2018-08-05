@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
+import SearchBar from './SearchBar'
+
+
 
 export class Map extends Component {
     constructor(props) {
@@ -44,22 +47,6 @@ export class Map extends Component {
     loadMap = () => {
       if (this.props && this.props.google){
         console.log('hello');
-        
-        // const {google} = this.props;
-        // const maps = google.maps;
-  
-        // const mapRef = this.refs.map;
-        // const node = ReactDOM.findDOMNode(mapRef);
-  
-        // let zoom = 14;
-        // let lat = 37.774929;
-        // let lng = -122.419416;
-        // const center = new maps.LatLng(lat, lng);
-        // const mapConfig = Object.assign({}, {
-        //   center: center,
-        //   zoom: zoom
-        // })
-        // this.map = new maps.Map(node, mapConfig)
 
         const {google} = this.props;
         const maps = google.maps;
@@ -78,7 +65,13 @@ export class Map extends Component {
       }
     }
   
-
+    setCurrentLocation = async(location) =>{
+        console.log('in setCurrentLocation with location:', location);
+        
+        await this.setState({...this.state, currentLocation: location})
+        console.log('this.state.currentLocation:', this.state.currentLocation);
+        
+    }
 
     onMarkerClick(props, marker, e) {
       this.setState({
@@ -101,8 +94,11 @@ export class Map extends Component {
 
       return (
           // div MUST have width and height defined here AND in map container
+        <div>
+        <SearchBar setCurrentLocation={this.setCurrentLocation} />
         <div style={style} ref="map">
           Loading map...
+        </div>
         </div>
       );
     }
@@ -117,7 +113,7 @@ Map.propsTypes = {
 
 // sets default values for certain properties
 Map.defaultProps = {
-    zoom: 13,
+    zoom: 11,
 
     initialCenter: {
         lat: 37.774929,
